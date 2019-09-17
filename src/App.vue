@@ -1,11 +1,11 @@
 <template>
   <div id="app">
     <div v-if="userSelected && channelSelected" id="chat">
-      <Messages :user="userId" :userName="userName"/>
-      <chatInput :user="userId" :userName="userName"/>
+      <Messages :user="userId" :userName="userName" :channelName="channelName" :channelId="channelId"/>
+      <chatInput :user="userId" :userName="userName" :channelName="channelName" :channelId="channelId"/>
     </div>
     <div id="channels" v-else-if="userSelected">
-      <channelSelection/>
+      <channelSelection :userId="userId"/>
     </div>
     <div v-else>
       <userSelection/>
@@ -31,8 +31,11 @@ export default {
     return {
       userId : '',
       userName: '',
+      channelId: '',
+      channelName: '',
+      usersInChannel: '',
       userSelected: false,
-      channelSelected: true,
+      channelSelected: false,
     }
   },
   methods:{
@@ -40,6 +43,12 @@ export default {
       this.userId = user.id.S;
       this.userName = user.name.S;
       this.userSelected = true;
+    },
+    setChannel: function(channel){
+      this.channelId = channel.id.S;
+      this.channelName = channel.name.S;
+      this.usersInChannel = channel.usersInChannel.SS;
+      this.channelSelected = true;
     }
   }
 }
